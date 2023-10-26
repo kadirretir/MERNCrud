@@ -1,0 +1,36 @@
+
+#containerr {
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   height: 75px;
+   background: rgb(36,23,0);
+   background: linear-gradient(90deg, rgba(36,23,0,1) 0%, rgba(121,78,9,1) 75%);
+    height: 75px;
+}
+
+.innerContainer {
+    margin: 0 auto;
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#nav {
+
+}
+
+.logoLeft {
+margin-left: 1rem;
+}
+
+.logo {
+    display: flex;
+    font-size: 1.5rem;
+    letter-spacing: 0.1rem;
+    color: white;
+    font-weight: bolder;
+}
+
