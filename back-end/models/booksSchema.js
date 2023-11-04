@@ -2,6 +2,10 @@ const mongoose = require("mongoose")
 
 
 const bookSchema = new mongoose.Schema({
+  customId: {
+    type: String,
+    unique: true, // Eşsiz olmasını istiyorsanız
+  },
     ad: {
       type: String,
       required: true
@@ -10,6 +14,7 @@ const bookSchema = new mongoose.Schema({
     yayinevi: String,
     yayinYili: Number,
     sayfaSayisi: Number,
+    imagePath: String
   });
 
 

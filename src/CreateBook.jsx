@@ -1,198 +1,311 @@
-import React, {useEffect, useState} from 'react'
-import { useNavigate  } from "react-router-dom";
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button'
-import styles from './assets/css/createbook.module.css'
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import styles from "./assets/css/createbook.module.css";
+import axios from "axios";
+import { styled } from "@mui/material/styles";
+import { v4 as uuidv4 } from 'uuid';
+
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const CreateBook = () => {
-
   const navigate = useNavigate();
   const [newBook, setNewBook] = useState({
     bookname: "",
     authorname: "",
     publishor: "",
     publishyear: "",
-    pagecount: ""
+    pagecount: "",
   });
+  const [imageFile, setImageFile] = useState();
 
   const [validationErrors, setValidationErrors] = useState({
     booknameError: "",
     authornameError: "",
     publishorError: "",
     publishyearError: "",
-    pagecountError: ""
+    pagecountError: "",
+    imageFileError: "",
   });
 
+  const submitAddBook = async (e) => {
+    e.preventDefault();
 
-  
-  
-const submitAddBook = async (e) => {
-  e.preventDefault();
+    let checkIfAnyError = false;
 
-  let checkIfAnyError;
+    // BOOKNAME ERROR HANDLER
+    if (newBook.bookname.trim() === "") {
+      setValidationErrors((prev) => ({
+        ...prev,
+        booknameError: "*Lütfen bir kitap ismi giriniz...",
+      }));
 
-  // BOOKNAME ERROR HANDLER
-  if (newBook.bookname.trim() === "") {
-       setValidationErrors((prev) => ({
-      ...prev,
-      booknameError: "*Lütfen bir kitap ismi giriniz..."
-    }));
-
-
-    checkIfAnyError = true;
-  } else {
-    setValidationErrors((prev) => ({
-      ...prev,
-      booknameError: ""
-    }));
-
-    checkIfAnyError = false;
-  }
-
-   // AUTHORNAME ERROR HANDLER
-  if (newBook.authorname.trim() === "") {
-       setValidationErrors((prev) => ({
-      ...prev,
-      authornameError: "*Lütfen yazar ismi giriniz..."
-    }));
-
-    checkIfAnyError = true;
-  } else {
-    setValidationErrors((prev) => ({
-      ...prev,
-      authornameError: ""
-    }));
-
-    checkIfAnyError = false;
-  }
-
-
-  // PUBLISHOR ERROR HANDLER
-  if (newBook.publishor.trim() === "") {
-    setValidationErrors((prev) => ({
-   ...prev,
-   publishorError: "*Lütfen yayınevi giriniz..."
- }));
-
- checkIfAnyError = true;
-} else {
- setValidationErrors((prev) => ({
-   ...prev,
-   publishorError: ""
- }));
-
- checkIfAnyError = false;
-}
-
-
-// publishyear error handler
-if (newBook.publishyear.trim() === "") {
-  setValidationErrors((prev) => ({
- ...prev,
- publishyearError: "*Lütfen kitabın yayın yılını yazınız..."
-}));
-
-checkIfAnyError = true;
-} else {
-setValidationErrors((prev) => ({
- ...prev,
- publishyearError: ""
-}));
-
-checkIfAnyError = false;
-}
-
-// pagecount error handler
-if (newBook.pagecount.trim() === "") {
-  setValidationErrors((prev) => ({
- ...prev,
- pagecountError: "*Lütfen kitabın sayfa sayısını giriniz..."
-}));
-
-checkIfAnyError = true;
-} else {
-setValidationErrors((prev) => ({
- ...prev,
- pagecountError: ""
-}));
-
-
-checkIfAnyError = false;
-}
-
-if(!checkIfAnyError) {
-try {
-      const sendData = await axios.post("http://localhost:3000/submitBook", newBook);
-
-      if(sendData) {
-        navigate("/");
-      }
-    } catch (error) {
-      throw new Error(error)
+      checkIfAnyError = true;
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        booknameError: "",
+      }));
     }
-  
-}
 
-}
+    // AUTHORNAME ERROR HANDLER
+    if (newBook.authorname.trim() === "") {
+      setValidationErrors((prev) => ({
+        ...prev,
+        authornameError: "*Lütfen yazar ismi giriniz...",
+      }));
 
-const handleChange = (e) => {
-setNewBook((prev) => ({...prev, [e.target.name]: e.target.value}));
-}
+      checkIfAnyError = true;
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        authornameError: "",
+      }));
+    }
+
+    // PUBLISHOR ERROR HANDLER
+    if (newBook.publishor.trim() === "") {
+      setValidationErrors((prev) => ({
+        ...prev,
+        publishorError: "*Lütfen yayınevi giriniz...",
+      }));
+
+      checkIfAnyError = true;
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        publishorError: "",
+      }));
+    }
+
+    // publishyear error handler
+    if (newBook.publishyear.trim() === "") {
+      setValidationErrors((prev) => ({
+        ...prev,
+        publishyearError: "*Lütfen kitabın yayın yılını yazınız...",
+      }));
+
+      checkIfAnyError = true;
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        publishyearError: "",
+      }));
+    }
+
+    // pagecount error handler
+    if (newBook.pagecount.trim() === "") {
+      setValidationErrors((prev) => ({
+        ...prev,
+        pagecountError: "*Lütfen kitabın sayfa sayısını giriniz...",
+      }));
+
+      checkIfAnyError = true;
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        pagecountError: "",
+      }));
+    }
+
+    if (typeof imageFile === "undefined") {
+      setValidationErrors((prev) => ({
+        ...prev,
+        imageFileError: "*Lütfen bir resim seçiniz...",
+      }));
+
+      checkIfAnyError = true;
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        imageFileError: "",
+      }));
+    }
+
+    // Hata yoksa axios post isteği gönder 
+    if (!checkIfAnyError) {
+      try {
+         const formData = new FormData();
+         formData.append("uploadmyfile", imageFile);
+         // Bir ID oluştur ve aynı ID ile dinamik olarak kitap bilgisini back-end'e gönder
+        const getID = uuidv4();
+        // KİTAP OLUŞTUR
+         const sendBookData = await axios.post(`http://localhost:3000/submitBook/newBook/${getID}`, newBook);
+         // OLUŞTURULAN KİTABA BİR RESİM EKLE
+        const sendImageData = await axios.post(`http://localhost:3000/submitBook/${getID}`, formData);
+    
+        if (sendBookData && sendImageData ) {
+          navigate("/");
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    }
+  };
+
+
+  const handleChange = (e) => {
+    setNewBook((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  // GET IMAGE NAME TO THE STATE
+  const imageHandler = (e) => {
+    // const altDize = e.target.value.split("fakepath\\")[1];
+    setImageFile(e.target.files[0]);
+  };
 
   return (
-    <Grid container maxWidth={'lg'} style={{ margin: "5rem auto" }}>
-          <Box
+    <Grid container maxWidth={"lg"} style={{ margin: "5rem auto" }}>
+      <Box
         onSubmit={submitAddBook}
-        action='/submitBook'
-        method='POST'
+        action="/submitBook"
+        method="POST"
         component="form"
-        style={{margin: "0 auto"}}
+        encType="multipart/form-data"
+        style={{ margin: "0 auto" }}
         sx={{
-          '& .MuiTextField-root': { m: 1 },
+          "& .MuiTextField-root": { m: 1 },
           width: 500,
-          maxWidth: '100%',
+          maxWidth: "100%",
         }}
-        noValidate
-        autoComplete="off"
       >
-
-        <h1 style={{textAlign: "center"}}>KİTAP EKLE</h1>
+        <h1 style={{ textAlign: "center" }}>KİTAP EKLE</h1>
         <Grid item md={"auto"}>
-           <TextField onChange={handleChange} required fullWidth id="bookname" name='bookname' label="Kitap İsmi" variant="standard" />
-           <h5 style={{color: "red"}}>{validationErrors.booknameError !== "" ? validationErrors.booknameError : null}</h5>
+          <TextField
+            onChange={handleChange}
+            required
+            fullWidth
+            id="bookname"
+            name="bookname"
+            label="Kitap İsmi"
+            variant="standard"
+          />
+          <h5 style={{ color: "red" }}>
+            {validationErrors.booknameError !== ""
+              ? validationErrors.booknameError
+              : null}
+          </h5>
         </Grid>
 
         <Grid item md={"auto"}>
-        <TextField onChange={handleChange} required fullWidth id="authorname" name='authorname' label="Kitabın Yazarı" variant="standard" /> 
-        <h5 style={{color: "red"}}>{validationErrors.authornameError !== "" ? validationErrors.authornameError : null}</h5>
+          <TextField
+            onChange={handleChange}
+            required
+            fullWidth
+            id="authorname"
+            name="authorname"
+            label="Kitabın Yazarı"
+            variant="standard"
+          />
+          <h5 style={{ color: "red" }}>
+            {validationErrors.authornameError !== ""
+              ? validationErrors.authornameError
+              : null}
+          </h5>
         </Grid>
 
         <Grid item md={"auto"}>
-        <TextField onChange={handleChange} required fullWidth id="publishor" name='publishor' label="Yayınıevi" variant="standard" />
-        <h5 style={{color: "red"}}>{validationErrors.publishorError !== "" ? validationErrors.publishorError : null}</h5>
+          <TextField
+            onChange={handleChange}
+            required
+            fullWidth
+            id="publishor"
+            name="publishor"
+            label="Yayınıevi"
+            variant="standard"
+          />
+          <h5 style={{ color: "red" }}>
+            {validationErrors.publishorError !== ""
+              ? validationErrors.publishorError
+              : null}
+          </h5>
         </Grid>
 
         <Grid item md={"auto"}>
-        <TextField onChange={handleChange} required fullWidth id="publishyear" type='number' name='publishyear' label="Yayın Yılı" variant="standard" />
-        <h5 style={{color: "red"}}>{validationErrors.publishyearError !== "" ? validationErrors.publishyearError : null}</h5>
+          <TextField
+            onChange={handleChange}
+            required
+            fullWidth
+            id="publishyear"
+            type="number"
+            name="publishyear"
+            label="Yayın Yılı"
+            variant="standard"
+          />
+          <h5 style={{ color: "red" }}>
+            {validationErrors.publishyearError !== ""
+              ? validationErrors.publishyearError
+              : null}
+          </h5>
         </Grid>
 
         <Grid item md={"auto"}>
-        <TextField onChange={handleChange} required fullWidth id="pagecount" type='number' name='pagecount' label="Sayfa Sayısı" variant="standard" />
-        <h5 style={{color: "red"}}>{validationErrors.pagecountError !== "" ? validationErrors.pagecountError : null}</h5>
-        
+          <TextField
+            onChange={handleChange}
+            required
+            fullWidth
+            id="pagecount"
+            type="number"
+            name="pagecount"
+            label="Sayfa Sayısı"
+            variant="standard"
+          />
+          <h5 style={{ color: "red" }}>
+            {validationErrors.pagecountError !== ""
+              ? validationErrors.pagecountError
+              : null}
+          </h5>
         </Grid>
-     
-            <Button type='submit' variant={'contained'} style={{width: "400px", margin: "1rem auto", display: "flex"}} color="success">Ekle</Button>
-          
-        </Box>
 
+        <Grid item md={"auto"}>
+          <Button
+            style={{ display: "flex", margin: "2rem auto" }}
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+            color="secondary"
+          >
+            Bir Resim Yükleyin
+            <VisuallyHiddenInput
+              type="file"
+              accept="image/png, image/jpeg, image/jpg"
+              name="uploadmyfile"
+              id="uploadmyfile"
+              onChange={imageHandler}
+            />
+          </Button>
+          <h5 style={{ color: "red" }}>
+            {validationErrors.imageFileError !== ""
+              ? validationErrors.imageFileError
+              : null}
+          </h5>
+        </Grid>
+
+        <input
+        className={styles.button}
+          type="submit"
+          value="Ekle"
+          style={{ width: "400px", margin: "1rem auto", display: "flex" }}
+        />
+      </Box>
     </Grid>
-    
-  )
-}
 
-export default CreateBook
+  );
+};
+
+export default CreateBook;
