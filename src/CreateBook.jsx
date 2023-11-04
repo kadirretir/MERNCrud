@@ -32,8 +32,12 @@ const CreateBook = () => {
     publishyear: "",
     pagecount: "",
   });
+
+  // Resim dosyasının yükleneceği state
   const [imageFile, setImageFile] = useState();
 
+
+  // Validasyon hatalarının tutulacağı state
   const [validationErrors, setValidationErrors] = useState({
     booknameError: "",
     authornameError: "",
@@ -43,6 +47,8 @@ const CreateBook = () => {
     imageFileError: "",
   });
 
+
+  // Kitap bilgilerinin gönderileceği form ve validasyon işlemleri
   const submitAddBook = async (e) => {
     e.preventDefault();
 
@@ -123,6 +129,8 @@ const CreateBook = () => {
       }));
     }
 
+
+    //  IMAGE ERROR HANDLER
     if (typeof imageFile === "undefined") {
       setValidationErrors((prev) => ({
         ...prev,
@@ -158,7 +166,7 @@ const CreateBook = () => {
     }
   };
 
-
+  // Input girdilerini newBook state'ine aktar
   const handleChange = (e) => {
     setNewBook((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -300,7 +308,7 @@ const CreateBook = () => {
         className={styles.button}
           type="submit"
           value="Ekle"
-          style={{ width: "400px", margin: "1rem auto", display: "flex" }}
+          style={{margin: "1rem auto", display: "flex" }}
         />
       </Box>
     </Grid>

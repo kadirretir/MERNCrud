@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static('uploads'))
 
-
+// GÖNDERİLEN KİTABI VERİTABANINA KAYDET
 app.post("/submitBook/newBook/:id", async (req,res) => {
   try {
       await connectToDb();
@@ -30,7 +30,7 @@ app.post("/submitBook/newBook/:id", async (req,res) => {
   }
 })
 
-
+// VERİTABANINA KAYDEDİLEN KİTABI BUL(ID ARACILIĞIYLA) VE O BELGEYE YÜKLENİLEN RESMİN YOLUNU KAYDET
 app.post("/submitBook/:id", upload.single('uploadmyfile'), async (req,res) => {
   try {
       await connectToDb();
@@ -45,7 +45,35 @@ app.post("/submitBook/:id", upload.single('uploadmyfile'), async (req,res) => {
   }
 })
 
+// GÖNDERİLEN BELGE İLE, VERİTABANINDA BULUNAN BELGE SADECE FARKLI İSE DEĞİŞİKLİK YAP.
+app.post("/updateBook", async (req,res) => {
+  try {
+      await connectToDb();
+      const doc1 = await Book.findById(req.body._id).lean();
+      const doc2 = req.body
 
+      const isDifferent = JSON.stringify(doc1) !== JSON.stringify(doc2);
+
+      if (isDifferent) {
+        await Book.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true });
+      }
+  } catch (error) {
+    throw new Error(error)
+  }
+})
+
+
+// SİLİNEN KİTABI VERİTABANINDAN BUL VE SİL
+app.post("/deleteBook/:id", async (req,res) => {
+  try {
+    await connectToDb();
+    await Book.findOneAndDelete({customId: req.params.id})
+  } catch (error) {
+    throw new Error(error)
+  }
+})
+
+// KİTAPLARI BUL VE GÖSTER
 app.get("/getBooks", async (req,res) => {
   try {
     await connectToDb();

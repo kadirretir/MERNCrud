@@ -18,10 +18,6 @@
     align-items: center;
 }
 
-#nav {
-
-}
-
 .logoLeft {
 margin-left: 1rem;
 }
@@ -32,5 +28,33 @@ margin-left: 1rem;
     letter-spacing: 0.1rem;
     color: white;
     font-weight: bolder;
+}
+
+#nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.links {
+    margin: 0 0.2rem !important;
+}
+
+@media screen and (max-width: 450px) {
+    #nav {
+        text-align: center;
+        flex-direction: column-reverse;
+    }
+
+    .links {
+        margin: 0.1rem 0 !important; 
+        margin-right: 0.6rem !important;
+    }
+
+   
+    #containerr {
+        height: 100px;
+    }
 }
 
