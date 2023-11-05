@@ -7,10 +7,6 @@
       {
          "src": "/addBook",
          "dest": "/"     
-      },
-      {
-        "src": "/back-end/uploads",
-        "dest": "/"     
-     }
+      }
     ]
   }
