@@ -22,7 +22,7 @@ function App() {
   const handleSaveChanges = async () => {
     setIsEditing(!isEditing)
     try {
-      await axios.post("https://mern-crud-server-eight.vercel.app/updateBook", editedBook)
+      await axios.post("https://mern-crud-tau.vercel.app/updateBook", editedBook)
       // useEffect hook'unu çalıştır ve güncel kitap bilgilerini al
       fetchBooks();
     } catch (error) {
@@ -36,7 +36,7 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get("https://mern-crud-server-eight.vercel.app/getBooks");
+      const res = await axios.get("https://mern-crud-tau.vercel.app/getBooks");
       setBooks(res.data);
     } catch (error) {
       console.error(error);
@@ -62,7 +62,7 @@ function App() {
   // TIKLANAN SİL BUTONUNA AİT KİTABI SİLECEK API'YE ISTEKTE BULUN
   const handleDelete = async (id) => {
     try {
-      await axios.post(`https://mern-crud-server-eight.vercel.app/deleteBook/${id}`)
+      await axios.post(`https://mern-crud-tau.vercel.app/deleteBook/${id}`)
     } catch (error) {
       throw new Error(error)
     }
