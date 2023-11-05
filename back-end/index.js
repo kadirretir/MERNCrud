@@ -90,4 +90,8 @@ app.get("/getBooks", async (req,res) => {
   }
 })
 
-app.listen(port)
+app.listen(port, () => {
+  console.log(`Server, ${port}. portta çalışıyor!`)
+})
+
+module.exports = app;
