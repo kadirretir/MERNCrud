@@ -8,7 +8,13 @@ const upload = require("./middlewares/imageUpload");
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cors())
+app.use(cors(
+  {
+    origin: ["https://mern-crud-tawny.vercel.app"],
+    methods: ["POST", "GET"],
+    credentials: true
+  }
+))
 app.use(express.static('uploads'))
 
 // GÖNDERİLEN KİTABI VERİTABANINA KAYDET
