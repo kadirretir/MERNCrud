@@ -96,7 +96,7 @@ function App() {
                       component="img"
                       alt="green iguana"
                       height="500"
-                      src={`../back-end/${book.imagePath}`}
+                      src={`../public/${book.imagePath}`}
                     />
                     <CardContent>
                     <TextField id="ad" onChange={handleInputChanges} name="ad" margin="dense" value={editedBook.ad} label="Kitap İsmini Giriniz..." variant="standard" />
@@ -117,7 +117,7 @@ function App() {
                       component="img"
                       alt="green iguana"
                       height="500"
-                      src={`../back-end/${book.imagePath}`}
+                      src={`../public/${book.imagePath}`}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
@@ -157,7 +157,7 @@ function App() {
                     component="img"
                     alt="green iguana"
                     height="500"
-                    src={`../back-end/${book.imagePath}`}
+                    src={`../public/${book.imagePath}`}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
