@@ -8,13 +8,7 @@ const upload = require("./middlewares/imageUpload");
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cors(
-  {
-    origin: ["https://mern-project-kadir.onrender.com/"],
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-))
+app.use(cors())
 app.use(express.static('uploads'))
 
 // GÖNDERİLEN KİTABI VERİTABANINA KAYDET
