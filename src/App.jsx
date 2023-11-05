@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField"
 
 function App() {
-  const [Books, setBooks] = useState([]);
+  const [Books, setBooks] = useState(undefined);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedBook, setEditedBook] = useState(null);
@@ -77,13 +77,13 @@ function App() {
   justifyContent="center"
   alignItems="center" spacing={2} container maxWidth={"xl"}  style={{ margin: "0 auto" }}>
           {/*Yüklenme aşamasında render olacak UI, Yükleniyor Progress Componenti */} 
-        {Books.length === 0 && (
+        {typeof Books !== "undefined" ? (
           <>
             <Box sx={{ width: "100%" }}>
               <LinearProgress color="success" />
             </Box>
           </>
-        )}
+        ) : <h1>Herhangi bir kitap bulunamadı...</h1>}
         {/* Kitapları Map ile yeni bir Array içinde sırala */}
         {Books.map((book, id) => {
           return (
