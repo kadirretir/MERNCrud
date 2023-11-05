@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(cors(
   {
-    origin: ["https://mern-crud-tau.vercel.app/"],
+    origin: ["https://mern-project-kadir.onrender.com/"],
     methods: ["GET", "POST"],
     credentials: true
   }
