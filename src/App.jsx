@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField"
 
 function App() {
-  const [Books, setBooks] = useState(undefined);
+  const [Books, setBooks] = useState([]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedBook, setEditedBook] = useState(null);
@@ -37,7 +37,12 @@ function App() {
   const fetchBooks = async () => {
     try {
       const res = await axios.get("https://mern-project-kadir.onrender.com/getBooks");
-      setBooks(res.data);
+      if(res.data.length === 0) {
+        setBooks(undefined)
+      } else {
+        setBooks(res.data);
+      }
+
     } catch (error) {
       console.error(error);
     }
