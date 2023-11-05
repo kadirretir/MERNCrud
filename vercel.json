@@ -9,7 +9,7 @@
          "dest": "/"     
       },
       {
-        "src": "/back-end",
+        "src": "/back-end/uploads",
         "dest": "/"     
      }
     ]
