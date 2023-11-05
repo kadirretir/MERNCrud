@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(cors(
   {
-    origin: ["https://mern-crud-tawny.vercel.app"],
+    origin: ["https://mern-crud-six.vercel.app/"],
     methods: ["POST", "GET"],
     credentials: true
   }
@@ -94,4 +94,3 @@ app.listen(port, () => {
   console.log(`Server, ${port}. portta çalışıyor!`)
 })
 
-module.exports = app;
