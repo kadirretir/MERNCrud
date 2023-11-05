@@ -84,6 +84,4 @@ app.get("/getBooks", async (req,res) => {
   }
 })
 
-app.listen(port, () => {
-    console.log(`SERVER, ${port}.portta çalışıyor!`)
-})
+app.listen(port)

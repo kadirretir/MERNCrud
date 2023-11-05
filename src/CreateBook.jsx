@@ -153,9 +153,9 @@ const CreateBook = () => {
          // Bir ID oluştur ve aynı ID ile dinamik olarak kitap bilgisini back-end'e gönder
         const getID = uuidv4();
         // KİTAP OLUŞTUR
-         const sendBookData = await axios.post(`http://localhost:3000/submitBook/newBook/${getID}`, newBook);
+         const sendBookData = await axios.post(`https://mern-crud-tawny.vercel.app/submitBook/newBook/${getID}`, newBook);
          // OLUŞTURULAN KİTABA BİR RESİM EKLE
-        const sendImageData = await axios.post(`http://localhost:3000/submitBook/${getID}`, formData);
+        const sendImageData = await axios.post(`https://mern-crud-tawny.vercel.app/submitBook/${getID}`, formData);
     
         if (sendBookData && sendImageData ) {
           navigate("/");

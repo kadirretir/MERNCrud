@@ -7,7 +7,6 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import styles from "./assets/css/app.module.css";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField"
@@ -23,7 +22,7 @@ function App() {
   const handleSaveChanges = async () => {
     setIsEditing(!isEditing)
     try {
-      await axios.post("http://localhost:3000/updateBook", editedBook)
+      await axios.post("https://mern-crud-tawny.vercel.app/updateBook", editedBook)
       // useEffect hook'unu çalıştır ve güncel kitap bilgilerini al
       fetchBooks();
     } catch (error) {
@@ -37,7 +36,7 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/getBooks");
+      const res = await axios.get("https://mern-crud-tawny.vercel.app/getBooks");
       setBooks(res.data);
     } catch (error) {
       console.error(error);
@@ -63,7 +62,7 @@ function App() {
   // TIKLANAN SİL BUTONUNA AİT KİTABI SİLECEK API'YE ISTEKTE BULUN
   const handleDelete = async (id) => {
     try {
-      await axios.post(`http://localhost:3000/deleteBook/${id}`)
+      await axios.post(`https://mern-crud-tawny.vercel.app/deleteBook/${id}`)
     } catch (error) {
       throw new Error(error)
     }
