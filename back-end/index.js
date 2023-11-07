@@ -41,7 +41,7 @@ app.post("/submitBook/:id", upload.single('uploadmyfile'), async (req,res) => {
 
       res.status(204).end()
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error, "Hata verdi! Resim yüklenemedi!")
   }
 })
 
