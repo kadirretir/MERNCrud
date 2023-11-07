@@ -4,25 +4,23 @@ const port = 3000;
 const cors = require('cors');
 const connectToDb = require("./models/db");
 const Book = require("./models/booksSchema");
-const upload = require("./middlewares/imageUpload");
 
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+app.use(express.urlencoded({extended: true, limit: "50mb", parameterLimit: 50000 }))
+app.use(express.json({limit: "50mb", extended: true}))
 app.use(cors())
 app.use(express.static('uploads'))
 
 // GÖNDERİLEN KİTABI VERİTABANINA KAYDET
-app.post("/submitBook/newBook/:id", async (req,res) => {
+app.post("/submitBook/newBook", async (req,res) => {
   try {
       await connectToDb();
       Book.create({
-        customId: req.params.id,
         ad: req.body.bookname,
         yazar: req.body.authorname,
         yayinevi: req.body.publishor,
         yayinYili: req.body.publishyear,
         sayfaSayisi: req.body.pagecount,
-        imagePath: "",
+        bookImage: req.body.bookImage,
       })
       res.status(204).end()
   } catch (error) {
@@ -30,20 +28,6 @@ app.post("/submitBook/newBook/:id", async (req,res) => {
   }
 })
 
-// VERİTABANINA KAYDEDİLEN KİTABI BUL(ID ARACILIĞIYLA) VE O BELGEYE YÜKLENİLEN RESMİN YOLUNU KAYDET
-app.post("/submitBook/:id", upload.single('uploadmyfile'), async (req,res) => {
-  try {
-      await connectToDb();
-       await Book.findOneAndUpdate(
-        {customId: req.params.id},
-        { $set: { imagePath: req.file.path }},
-        {new: true})
-
-      res.status(204).end()
-  } catch (error) {
-    throw new Error(error, "Hata verdi! Resim yüklenemedi!")
-  }
-})
 
 // GÖNDERİLEN BELGE İLE, VERİTABANINDA BULUNAN BELGE SADECE FARKLI İSE DEĞİŞİKLİK YAP.
 app.post("/updateBook", async (req,res) => {
@@ -67,7 +51,7 @@ app.post("/updateBook", async (req,res) => {
 app.post("/deleteBook/:id", async (req,res) => {
   try {
     await connectToDb();
-    await Book.findOneAndDelete({customId: req.params.id})
+    await Book.findOneAndDelete({_id: req.params.id})
   } catch (error) {
     throw new Error(error)
   }

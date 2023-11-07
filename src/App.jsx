@@ -99,13 +99,13 @@ function App() {
                 <Grid item lg={3} key={id} >
                       {/* Düzenleme moduna girildiyse tıklanan kitaba özel farklı bir UI ver ve diğerlerini olduğu gibi sırala*/}
                   {isEditing ? (
-                    book.customId === editedBook.customId ? (
+                    book._id === editedBook._id ? (
                       <Card sx={{ maxWidth: 345 }}>
                         <CardMedia
                           component="img"
                           alt="green iguana"
                           height="500"
-                          src={`../back-end/${book.imagePath}`}
+                          src={book.bookImage}
                         />
                         <CardContent>
                         <TextField id="ad" onChange={handleInputChanges} name="ad" margin="dense" value={editedBook.ad} label="Kitap İsmini Giriniz..." variant="standard" />
@@ -126,7 +126,7 @@ function App() {
                           component="img"
                           alt="green iguana"
                           height="500"
-                          src={`../back-end/${book.imagePath}`}
+                          src={book.bookImage}
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="div">
@@ -166,7 +166,7 @@ function App() {
                         component="img"
                         alt="green iguana"
                         height="500"
-                        src={`../back-end/${book.imagePath}`}
+                        src={book.bookImage}
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
@@ -196,7 +196,7 @@ function App() {
                         >
                           Düzenle
                         </Button>
-                        <Button onClick={() => handleDelete(book.customId)} color="error" size="small">Sil</Button>
+                        <Button onClick={() => handleDelete(book._id)} color="error" size="small">Sil</Button>
                       </CardActions>
                     </Card>
                   )}

@@ -8,7 +8,6 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styles from "./assets/css/createbook.module.css";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
-import { v4 as uuidv4 } from 'uuid';
 
 
 const VisuallyHiddenInput = styled("input")({
@@ -31,10 +30,11 @@ const CreateBook = () => {
     publishor: "",
     publishyear: "",
     pagecount: "",
+    bookImage: "",
   });
 
   // Resim dosyasının yükleneceği state
-  const [imageFile, setImageFile] = useState();
+  const [imageFile, setImageFile] = useState("");
 
 
   // Validasyon hatalarının tutulacağı state
@@ -131,7 +131,7 @@ const CreateBook = () => {
 
 
     //  IMAGE ERROR HANDLER
-    if (typeof imageFile === "undefined") {
+    if (typeof imageFile === "undefined" || imageFile === "") {
       setValidationErrors((prev) => ({
         ...prev,
         imageFileError: "*Lütfen bir resim seçiniz...",
@@ -148,16 +148,9 @@ const CreateBook = () => {
     // Hata yoksa axios post isteği gönder 
     if (!checkIfAnyError) {
       try {
-         const formData = new FormData();
-         formData.append("uploadmyfile", imageFile);
-         // Bir ID oluştur ve aynı ID ile dinamik olarak kitap bilgisini back-end'e gönder
-        const getID = uuidv4();
         // KİTAP OLUŞTUR
-         const sendBookData = await axios.post(`https://mern-project-kadir.onrender.com/submitBook/newBook/${getID}`, newBook);
-         // OLUŞTURULAN KİTABA BİR RESİM EKLE
-        const sendImageData = await axios.post(`https://mern-project-kadir.onrender.com/submitBook/${getID}`, formData);
-    
-        if (sendBookData && sendImageData ) {
+         const sendBookData = await axios.post(`https://mern-project-kadir.onrender.com/submitBook/newBook`, newBook);
+        if (sendBookData ) {
           navigate("/");
         }
       } catch (error) {
@@ -173,9 +166,23 @@ const CreateBook = () => {
 
   // GET IMAGE NAME TO THE STATE
   const imageHandler = (e) => {
-    // const altDize = e.target.value.split("fakepath\\")[1];
-    setImageFile(e.target.files[0]);
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = () => {
+      setImageFile(reader.result);
+      setNewBook((prev) => ({...prev, bookImage: reader.result}))
+    }
+    reader.onerror = (error) => {
+      console.log("Hata:", error)
+    }
   };
+
+  const deleteBookFromState = () => {
+    setImageFile("");
+    setNewBook((prev) => ({...prev, bookImage: ""}))
+  const inputElement = document.getElementById("bookImage");
+  inputElement.value = null; 
+  }
 
   return (
     <Grid container maxWidth={"lg"} style={{ margin: "5rem auto" }}>
@@ -292,8 +299,8 @@ const CreateBook = () => {
             <VisuallyHiddenInput
               type="file"
               accept="image/png, image/jpeg, image/jpg"
-              name="uploadmyfile"
-              id="uploadmyfile"
+              name="bookImage"
+              id="bookImage"
               onChange={imageHandler}
             />
           </Button>
@@ -302,6 +309,13 @@ const CreateBook = () => {
               ? validationErrors.imageFileError
               : null}
           </h5>
+          {imageFile == "" || imageFile == null ? "" : (
+          <div style={{textAlign: "center"}}>
+          <h1 style={{color: "green"}}>Resim başarıyla yüklendi!</h1>
+          <img width={145} height={230} src={imageFile}/> <br />
+          <Button color="error" variant="contained" onClick={deleteBookFromState}>İptal Et</Button>
+          </div>
+          )}
         </Grid>
 
         <input
