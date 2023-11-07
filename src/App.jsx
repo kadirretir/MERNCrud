@@ -10,10 +10,12 @@ import axios from "axios";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField"
+import {Link} from 'react-router-dom';
+
 
 function App() {
   const [Books, setBooks] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editedBook, setEditedBook] = useState(null);
 
@@ -37,12 +39,9 @@ function App() {
   const fetchBooks = async () => {
     try {
       const res = await axios.get("https://mern-project-kadir.onrender.com/getBooks");
-      if(res.data.length === 0) {
-        setBooks(undefined)
-      } else {
         setBooks(res.data);
-      }
-
+      
+      setIsLoading(false); 
     } catch (error) {
       console.error(error);
     }
@@ -81,124 +80,131 @@ function App() {
       <Grid   direction="row"
   justifyContent="center"
   alignItems="center" spacing={2} container maxWidth={"xl"}  style={{ margin: "0 auto" }}>
-          {/*Yüklenme aşamasında render olacak UI, Yükleniyor Progress Componenti */} 
-        {typeof Books !== "undefined" ? (
-          <>
+                    {isLoading ? (
             <Box sx={{ width: "100%" }}>
               <LinearProgress color="success" />
             </Box>
-          </>
-        ) : <h1>Herhangi bir kitap bulunamadı...</h1>}
-        {/* Kitapları Map ile yeni bir Array içinde sırala */}
-        {Books.map((book, id) => {
-          return (
-            <Grid item lg={3} key={id} >
-                  {/* Düzenleme moduna girildiyse tıklanan kitaba özel farklı bir UI ver ve diğerlerini olduğu gibi sırala*/}
-              {isEditing ? (
-                book.customId === editedBook.customId ? (
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardMedia
-                      component="img"
-                      alt="green iguana"
-                      height="500"
-                      src={`../public/${book.imagePath}`}
-                    />
-                    <CardContent>
-                    <TextField id="ad" onChange={handleInputChanges} name="ad" margin="dense" value={editedBook.ad} label="Kitap İsmini Giriniz..." variant="standard" />
-                   <TextField id="yazar" onChange={handleInputChanges} name="yazar" value={editedBook.yazar} label="Kitabın Yazarını Giriniz..." variant="standard" />
-                   <TextField id="sayfaSayisi" onChange={handleInputChanges} type="number" name="sayfaSayisi" value={editedBook.sayfaSayisi} label="Kitabın Sayfa Sayısı..." variant="standard" />
-                   <TextField id="yayinYili" onChange={handleInputChanges} name="yayinYili" value={editedBook.yayinYili} label="Kitabın Yayın Yılı..." variant="standard" />
-                   <TextField id="yayinevi" onChange={handleInputChanges} name="yayinevi" value={editedBook.yayinevi} label="Kitabın Yayınevi..." variant="standard" />
-                    </CardContent>
+          ) : Books.length === 0 ? (
+            <>
+            <h1 align="center">Herhangi bir kitap bulunamadı. <br />
 
-                    <CardActions>
-                      <Button size="small" onClick={handleSaveChanges}>Kaydet</Button>
-                      <Button size="small" onClick={() => setIsEditing(!isEditing)}>Düzenlemeden Çık</Button>
-                    </CardActions>
-                  </Card>
-                ) : (
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardMedia
-                      component="img"
-                      alt="green iguana"
-                      height="500"
-                      src={`../public/${book.imagePath}`}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {book.ad}
-                      </Typography>
+            <Link to="/addBook"  color="green">Kitap Ekleyebilirsiniz</Link>
+            </h1>
+    
+            </>
 
-                      <Typography gutterBottom variant="h6" component="div">
-                        Yazar {book.yazar}
-                      </Typography>
-                      <Typography variant="body3" color="text.secondary">
-                        Toplam {book.sayfaSayisi} Sayfa
-                      </Typography>
-
-                      <Typography variant="body2" color="text.secondary">
-                        {book.yayinYili} Yılında Yayınlanmış
-                      </Typography>
-
-                      <Typography variant="body3" color="text.secondary">
-                        Yayınevi {book.yayinevi}
-                      </Typography>
-                    </CardContent>
-
-                    <CardActions>
-                      <Button
-                        onClick={() => handleEditClick(id, book)}
-                        size="small"
-                      >
-                        Düzenle
-                      </Button>
-                      <Button color="error" size="small">Sil</Button>
-                    </CardActions>
-                  </Card>
-                )
-              ) : (
-                <Card sx={{ maxWidth: 345 }}>
-                  <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height="500"
-                    src={`../public/${book.imagePath}`}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {book.ad}
-                    </Typography>
-
-                    <Typography gutterBottom variant="h6" component="div">
-                      Yazar {book.yazar}
-                    </Typography>
-                    <Typography variant="body3" color="text.secondary">
-                      Toplam {book.sayfaSayisi} Sayfa
-                    </Typography>
-
-                    <Typography variant="body2" color="text.secondary">
-                      {book.yayinYili} Yılında Yayınlanmış
-                    </Typography>
-
-                    <Typography variant="body3" color="text.secondary">
-                      Yayınevi {book.yayinevi}
-                    </Typography>
-                  </CardContent>
-
-                  <CardActions>
-                    <Button
-                      onClick={() => handleEditClick(id, book)}
-                      size="small"
-                    >
-                      Düzenle
-                    </Button>
-                    <Button onClick={() => handleDelete(book.customId)} color="error" size="small">Sil</Button>
-                  </CardActions>
-                </Card>
-              )}
-            </Grid>
-          );
-        })}
+          ) : (
+            Books.map((book, id) => {
+              return (
+                <Grid item lg={3} key={id} >
+                      {/* Düzenleme moduna girildiyse tıklanan kitaba özel farklı bir UI ver ve diğerlerini olduğu gibi sırala*/}
+                  {isEditing ? (
+                    book.customId === editedBook.customId ? (
+                      <Card sx={{ maxWidth: 345 }}>
+                        <CardMedia
+                          component="img"
+                          alt="green iguana"
+                          height="500"
+                          src={`../back-end/${book.imagePath}`}
+                        />
+                        <CardContent>
+                        <TextField id="ad" onChange={handleInputChanges} name="ad" margin="dense" value={editedBook.ad} label="Kitap İsmini Giriniz..." variant="standard" />
+                       <TextField id="yazar" onChange={handleInputChanges} name="yazar" value={editedBook.yazar} label="Kitabın Yazarını Giriniz..." variant="standard" />
+                       <TextField id="sayfaSayisi" onChange={handleInputChanges} type="number" name="sayfaSayisi" value={editedBook.sayfaSayisi} label="Kitabın Sayfa Sayısı..." variant="standard" />
+                       <TextField id="yayinYili" onChange={handleInputChanges} name="yayinYili" value={editedBook.yayinYili} label="Kitabın Yayın Yılı..." variant="standard" />
+                       <TextField id="yayinevi" onChange={handleInputChanges} name="yayinevi" value={editedBook.yayinevi} label="Kitabın Yayınevi..." variant="standard" />
+                        </CardContent>
+    
+                        <CardActions>
+                          <Button size="small" onClick={handleSaveChanges}>Kaydet</Button>
+                          <Button size="small" onClick={() => setIsEditing(!isEditing)}>Düzenlemeden Çık</Button>
+                        </CardActions>
+                      </Card>
+                    ) : (
+                      <Card sx={{ maxWidth: 345 }}>
+                        <CardMedia
+                          component="img"
+                          alt="green iguana"
+                          height="500"
+                          src={`../back-end/${book.imagePath}`}
+                        />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {book.ad}
+                          </Typography>
+    
+                          <Typography gutterBottom variant="h6" component="div">
+                            Yazar {book.yazar}
+                          </Typography>
+                          <Typography variant="body3" color="text.secondary">
+                            Toplam {book.sayfaSayisi} Sayfa
+                          </Typography>
+    
+                          <Typography variant="body2" color="text.secondary">
+                            {book.yayinYili} Yılında Yayınlanmış
+                          </Typography>
+    
+                          <Typography variant="body3" color="text.secondary">
+                            Yayınevi {book.yayinevi}
+                          </Typography>
+                        </CardContent>
+    
+                        <CardActions>
+                          <Button
+                            onClick={() => handleEditClick(id, book)}
+                            size="small"
+                          >
+                            Düzenle
+                          </Button>
+                          <Button color="error" size="small">Sil</Button>
+                        </CardActions>
+                      </Card>
+                    )
+                  ) : (
+                    <Card sx={{ maxWidth: 345 }}>
+                      <CardMedia
+                        component="img"
+                        alt="green iguana"
+                        height="500"
+                        src={`../back-end/${book.imagePath}`}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {book.ad}
+                        </Typography>
+    
+                        <Typography gutterBottom variant="h6" component="div">
+                          Yazar {book.yazar}
+                        </Typography>
+                        <Typography variant="body3" color="text.secondary">
+                          Toplam {book.sayfaSayisi} Sayfa
+                        </Typography>
+    
+                        <Typography variant="body2" color="text.secondary">
+                          {book.yayinYili} Yılında Yayınlanmış
+                        </Typography>
+    
+                        <Typography variant="body3" color="text.secondary">
+                          Yayınevi {book.yayinevi}
+                        </Typography>
+                      </CardContent>
+    
+                      <CardActions>
+                        <Button
+                          onClick={() => handleEditClick(id, book)}
+                          size="small"
+                        >
+                          Düzenle
+                        </Button>
+                        <Button onClick={() => handleDelete(book.customId)} color="error" size="small">Sil</Button>
+                      </CardActions>
+                    </Card>
+                  )}
+                </Grid>
+              );
+            })
+          )}
+      
       </Grid>
     </div>
   );
